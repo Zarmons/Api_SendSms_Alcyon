@@ -1,7 +1,6 @@
 #FastAPI
 from fastapi import FastAPI
 
-
 #Archivos src
 from src.controller import send_verify_number_phone, validate_verification_code
 from src.schema import MobileNumbers, VerificationCode
