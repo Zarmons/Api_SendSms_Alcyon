@@ -3,8 +3,9 @@ import json
 import re
 import random
 
-# Validacion del numero celular y envio de SMS con en el codigo de validacion
+global_code = 0
 
+# Validacion del numero celular y envio de SMS con en el codigo de validacion
 
 def send_verify_number_phone(number):
     _REGEX_PHONE_NUMBER = re.compile(
@@ -28,22 +29,22 @@ def send_verify_number_phone(number):
 
 # Creacion de codigos de seis digitos aleatoriamente
 
-
 def create_verification_code():
     code_created = random.randint(100000, 999999)
+    global global_code 
+    global_code = code_created
     return code_created
-
 
 # Validacion para saber si el codigo ingresado si es igual al generado
 
-
 def validate_verification_code(code):
-    if code == "123456":
-        response = response_data("success", "codigo valido", "none")
+    if code == global_code:
+        response = response_data("success", "codigo valido", f"{code}" " " f"{global_code}")
     else:
-        response = response_data("error", "verifica tu codigo", "none")
+        response = response_data("error", "verifica tu codigo", f"{code}" " " f"{global_code}")
     return response
 
+#Creacion de mensajes de respuesta de las API
 
 def response_data(MessageDescription, Message, MobileNumber):
     response = {
