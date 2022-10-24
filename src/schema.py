@@ -1,8 +1,8 @@
 #Pydantic
 from pydantic import BaseModel
 
-class MobileNumbers(BaseModel): 
+class mobile_numbers(BaseModel): 
     mobileNumbers: str 
 
-class VerificationCode(BaseModel):
+class verification_code(BaseModel):
     code: str
