@@ -2,8 +2,10 @@ import requests
 import json
 import re
 import random
+import secrets
+import asyncio
 
-global_code = 0
+global global_code
 
 # Validacion del numero celular y envio de SMS con en el codigo de validacion
 
@@ -13,6 +15,7 @@ def send_verify_number_phone(number):
     )
     if not _REGEX_PHONE_NUMBER.match(number):
         verification_code = create_verification_code()
+        token = generate_token()
         url = "https://api.reddantu.com/api/v2/SendSMS"
         data = {
             "senderId": "sms",
@@ -22,9 +25,9 @@ def send_verify_number_phone(number):
             "clientId": "64a8236c-ce6a-4f5a-abd1-a83ec221c7e7",
         }
         response_sms = requests.post(url, json=data)
-        response = response_data( "success", "El codigo fue enviado correctamente al numero de celular: " f"{number}", f"{number}" )
+        response = response_data( "success", "El codigo fue enviado correctamente al numero de celular: " f"{number}", f"{number}", f"{token}" )
     else:
-        response = response_data( "error", "Por favor verifique su numero de celular", f"{number}" )
+        response = response_data( "error", "Por favor verifique su numero de celular", f"{number}", "null" )
     return response
 
 # Creacion de codigos de seis digitos aleatoriamente
@@ -33,20 +36,32 @@ def create_verification_code():
     code_created = random.randint(100000, 999999)
     global global_code 
     global_code = code_created
+    time = asyncio.sleep(60)
+    if time == 0 :
+        global_code = 0
     return code_created
 
 # Validacion para saber si el codigo ingresado si es igual al generado
 
-def validate_verification_code(code):
-    if code == global_code:
-        response = response_data("success", "codigo valido", f"{code}" " " f"{global_code}")
+def validate_verification_code(verification_code):
+    code = int(verification_code.code)
+    if global_code == 0 :
+        response = response_data("warning", "El tiempo ha caducado", f"{code}" " " f"{global_code}", "null")
+    elif code != global_code :
+        response = response_data("error", "verifica tu codigo", f"{code}" " " f"{global_code}", "null")
     else:
-        response = response_data("error", "verifica tu codigo", f"{code}" " " f"{global_code}")
+        response = response_data("success", "codigo valido", f"{code}" " " f"{global_code}", "null")
     return response
+
+# Creacion de token 
+
+def generate_token():
+    token = secrets.token_urlsafe(50)
+    return token
 
 #Creacion de mensajes de respuesta de las API
 
-def response_data(MessageDescription, Message, MobileNumber):
+def response_data(MessageDescription, Message, MobileNumber, token):
     response = {
         "Data": [
             {
@@ -54,6 +69,7 @@ def response_data(MessageDescription, Message, MobileNumber):
                 "Message": Message,
                 "MobileNumber": MobileNumber,
             }
-        ]
+        ],
+        "AccessToken": token
     }
     return response

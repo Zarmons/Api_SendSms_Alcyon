@@ -19,6 +19,5 @@ def send_message(mobile_numbers: mobile_numbers):
 
 @app.post("/verification_code", name="VERIFICATION_CODE")
 def validate_code(verification_code: verification_code):
-    code = verification_code.code
-    response = validate_verification_code(code)
+    response = validate_verification_code(verification_code)
     return response
