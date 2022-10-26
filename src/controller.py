@@ -5,7 +5,7 @@ global global_code
 # Validacion del numero celular y envio de SMS con en el codigo de validacion
 
 def send_verify_number_phone(number):
-    regex = r"^(57)\s?(300|301|302|303|304|324|305|310|311|312|313|314|320|321|322|323|315|316|317|318|319|350|351|302|323|324|324|333)\s?([0-9]){7}$"
+    regex = r"^(\(?\+[\d]{1,4}\)?)\s?([\d]{1,5})\s?([\d][\s\.-]?){6,10}$"
     result = re.match(regex, number)
     if result is None:
         response = response_data( "messageNumber", "error", "Por favor verifique su numero de celular", f"{number}", "null" )
