@@ -2,8 +2,8 @@
 from fastapi import FastAPI
 
 #Archivos src
-from src.controller import send_verify_number_phone, validate_verification_code
-from src.schema import mobile_numbers, verification_code
+from src.sms_code.controller import send_verify_number_phone, validate_verification_code
+from src.sms_code.schema import mobile_numbers, verification_code
 
 app = FastAPI()
 
