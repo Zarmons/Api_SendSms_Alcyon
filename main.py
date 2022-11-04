@@ -21,3 +21,7 @@ def send_message(mobile_numbers: mobile_numbers):
 def validate_code(verification_code: verification_code):
     response = validate_verification_code(verification_code)
     return response
+
+@app.get("/list_message", name="LIST_MESSAGE")
+def list_message():
+    pass
