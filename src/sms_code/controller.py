@@ -1,4 +1,4 @@
-import requests, re, random, secrets
+import requests, re, random, secrets, json
 
 global global_code
 
@@ -25,8 +25,9 @@ def send_verify_number_phone(number):
         }        
         response_sms = requests.post(url, json=data)
         print("sms--->",response_sms)
+        response_json =  json.loads(response_sms._content)
         # T = sms_trigger()
-        response = response_data( "messageNumber", "success", "El código fue enviado al numero de celular: " f"{new_number}", f"{new_number}", "null" ), response_sms.request
+        response = response_data( "messageNumber", "success", "El código fue enviado al numero de celular: " f"{new_number}", f"{new_number}", "null" ), response_json
     return  response
 
 # Creación de códigos de seis dígitos aleatoriamente
