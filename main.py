@@ -24,6 +24,8 @@ def validate_code(verification_code: verification_code):
     response = validate_verification_code(verification_code)
     return response
 
+# Traer información de los sms enviados
+
 @app.get("/list_message", name="LIST_MESSAGE")
 def list_message(fromdate: str, enddate: str):
     response = get_sms_sent(fromdate, enddate)
