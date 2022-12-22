@@ -1,11 +1,11 @@
-import requests, re, random, secrets
+import requests, re, random, secrets, json
 
 global global_code
 
-# Validacion del numero celular y envio de SMS con en el codigo de validacion
+# Validación del numero celular y envió de SMS con en el código de validación
 
 def send_verify_number_phone(number):
-    regex = r"^(\(?\+[\d]{1,3}\)?)\s?([\d]{1,5})\s?([\d][\s\.-]?){6,10}$"
+    regex = r"^(\(?\+[\d]{1,3}\)?)\s?([\d]{1,5})\s?([\d][\s\.-]?){6,7}$"
     # regex = r"^(57)\s?(300|301|302|303|304|324|305|310|311|312|313|314|320|321|322|323|315|316|317|318|319|350|351|302|323|324|324|333)\s?([0-9]){7}$"
     result = re.match(regex, number)
     if result is None:
@@ -16,7 +16,7 @@ def send_verify_number_phone(number):
         url = "https://api.reddantu.com/api/v2/SendSMS"
         data = {
             "senderId": "sms",
-            "message": "su codigo de validacion es: " f"{verification_code}",
+            "message": "su código de validación es: " f"{verification_code}",
             "mobileNumbers": new_number,
             "apiKey": "Rq1vExJtdTs/oZuUzHm0vYQNGO3ifyoNke53wxlxUr4=",
             "clientId": "64a8236c-ce6a-4f5a-abd1-a83ec221c7e7",
@@ -25,11 +25,12 @@ def send_verify_number_phone(number):
         }        
         response_sms = requests.post(url, json=data)
         print("sms--->",response_sms)
+        response_json =  json.loads(response_sms._content)
         # T = sms_trigger()
-        response = response_data( "messageNumber", "success", "El codigo fue enviado al numero de celular: " f"{new_number}", f"{new_number}", "null" ), response_sms.request
+        response = response_data( "messageNumber", "success", "El código fue enviado al numero de celular: " f"{new_number}", f"{new_number}", "null" ), response_json
     return  response
 
-# Creacion de codigos de seis digitos aleatoriamente
+# Creación de códigos de seis dígitos aleatoriamente
 
 def create_verification_code():
     code_created = random.randint(100000, 999999)
@@ -37,25 +38,25 @@ def create_verification_code():
     global_code = code_created
     return code_created
 
-# Validacion para saber si el codigo ingresado si es igual al generado
+# Validación para saber si el código ingresado si es igual al generado
 
 def validate_verification_code(verification_code):
     global global_code
     if  int(verification_code.code) != global_code :
-        response = response_data("messageCode", "error", "Codigo invalido", "", "")
+        response = response_data("messageCode", "error", "Código invalido", "", "")
     else:
         token = generate_token()
-        response = response_data("messageCode", "success", "Codigo valido", "", f"{token}")
+        response = response_data("messageCode", "success", "Código valido", "", f"{token}")
         global_code = 0
     return response
 
-# Creacion de token 
+# Creación de token 
 
 def generate_token():
     token = secrets.token_urlsafe(50)
     return token
 
-#Creacion de mensajes de respuesta de las API
+#Creación de mensajes de respuesta de las API
 
 def response_data(typeMessage, MessageDescription, Message, MobileNumber, token):
     if typeMessage == "messageNumber" :
