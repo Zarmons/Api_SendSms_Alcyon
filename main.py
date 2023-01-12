@@ -1,5 +1,7 @@
 #FastAPI
 from fastapi import FastAPI
+from flask import Flask, request, Response
+import requests, json
 
 #Archivos src
 from src.sms_code.controller import send_verify_number_phone, validate_verification_code
@@ -30,3 +32,8 @@ def validate_code(verification_code: verification_code):
 def list_message(fromdate: str, enddate: str):
     response = get_sms_sent(fromdate, enddate)
     return response
+
+@app.route('/webhook', methods=['POST'])
+def return_response():
+    data = requests.json
+    return data
