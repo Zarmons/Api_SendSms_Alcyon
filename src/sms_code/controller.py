@@ -16,7 +16,7 @@ def send_verify_number_phone(number):
         url = "https://api.reddantu.com/api/v2/SendSMS"
         data = {
             "senderId": "sms",
-            "message": "su código de validación es: " f"{verification_code}",
+            "message": "su codigo de validacion es: " f"{verification_code}",
             "mobileNumbers": new_number,
             "apiKey": "Rq1vExJtdTs/oZuUzHm0vYQNGO3ifyoNke53wxlxUr4=",
             "clientId": "64a8236c-ce6a-4f5a-abd1-a83ec221c7e7",
