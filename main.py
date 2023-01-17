@@ -1,13 +1,19 @@
 #FastAPI
-from fastapi import FastAPI
-from flask import Flask, request, Response
-import requests, json
+from fastapi import FastAPI, APIRouter
+# from flask import Flask, request, Response
+
+import redis
+
+routes_product = APIRouter()
+fake_db = []
+
 
 #Archivos src
 from src.sms_code.controller import send_verify_number_phone, validate_verification_code
 from src.sms_code.schema import mobile_numbers, verification_code
 from src.get_sms.controller import get_sms_sent
 from src.get_sms.schema import  date_sms
+from src.get_sms.crud import  save_hash, get_hash
 
 app = FastAPI()
 
@@ -28,12 +34,33 @@ def validate_code(verification_code: verification_code):
 
 # Traer información de los sms enviados
 
-@app.get("/list_message", name="LIST_MESSAGE")
+@app.get("/list_message_date", name="LIST_MESSAGE_DATE")
 def list_message(fromdate: str, enddate: str):
     response = get_sms_sent(fromdate, enddate)
-    return response
+    res = response["Data"]
+    for i in range (len(res)):
+        data = res[i]
+        # OPERATION DB
+        fake_db.append(data)
 
-@app.route('/webhook', methods=['POST'])
-def return_response():
-    data = requests.json
+        # OPERATION CACHE
+        save_hash(key=data["MessageId"], data=data)
+    return "success", data
+
+
+# Webhook para recibir sms enviados 1 por 1
+
+# @app.post('/webhook')
+# def return_response():
+#     request: Request
+    
+#     response: Response._content
+#     return response
+
+# mostrar sms guardados con redis
+
+@app.get("/list_message_db", name="LIST_MESSAGE_DB")
+def list_message_db():
+    info = 'prueba'
+    data = get_hash(info)
     return data
