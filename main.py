@@ -61,6 +61,6 @@ def list_message(fromdate: str, enddate: str):
 
 @app.get("/list_message_db", name="LIST_MESSAGE_DB")
 def list_message_db():
-    info = 'prueba'
+    info = '0013ee81-7b28-4665-aede-8997f8c851ee'
     data = get_hash(info)
     return data
