@@ -2,8 +2,6 @@
 from fastapi import FastAPI, APIRouter
 # from flask import Flask, request, Response
 
-# import redis
-
 routes_product = APIRouter()
 fake_db = []
 
