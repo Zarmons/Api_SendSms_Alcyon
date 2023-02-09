@@ -11,7 +11,7 @@ from src.sms_code.controller import send_verify_number_phone, validate_verificat
 from src.sms_code.schema import mobile_numbers, verification_code
 from src.get_sms.controller import get_sms_sent
 from src.get_sms.schema import  date_sms
-# from src.get_sms.crud import  save_hash, get_hash
+from src.get_sms.crud import  save_hash, get_hash
 
 app = FastAPI()
 
@@ -42,7 +42,7 @@ def list_message(fromdate: str, enddate: str):
         fake_db.append(data)
 
         # OPERATION CACHE
-        # save_hash(key=data["MessageId"], data=data)
+        save_hash(key=data["MessageId"], data=data)
     return "success", data
 
 
@@ -60,5 +60,5 @@ def list_message(fromdate: str, enddate: str):
 @app.get("/list_message_db", name="LIST_MESSAGE_DB")
 def list_message_db():
     info = '0013ee81-7b28-4665-aede-8997f8c851ee'
-    # data = get_hash(info)
+    data = get_hash(info)
     return info
