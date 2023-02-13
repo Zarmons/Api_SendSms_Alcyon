@@ -20,7 +20,8 @@ app = FastAPI()
 @app.post("/sms", name="SMS")
 def send_message(mobile_numbers: mobile_numbers):
     number = mobile_numbers.mobileNumbers
-    response = send_verify_number_phone(number)
+    apiKey = mobile_numbers.apiKey
+    response = send_verify_number_phone(number, apiKey)
     return response
 
 #API para verificar código generado
@@ -43,7 +44,7 @@ def list_message(fromdate: str, enddate: str):
 
         # OPERATION CACHE
         save_hash(key=data["MessageId"], data=data)
-    return "success", data
+    return "success", data, res[i]
 
 
 # Webhook para recibir sms enviados 1 por 1

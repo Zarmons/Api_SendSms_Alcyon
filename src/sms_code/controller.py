@@ -4,13 +4,13 @@ global global_code
 
 # Validación del numero celular y envió de SMS con en el código de validación
 
-def send_verify_number_phone(number):
+def send_verify_number_phone(number, apiKey):
     regex = r"^(\(?\+[\d]{1,3}\)?)\s?([\d]{1,5})\s?([\d][\s\.-]?){6,7}$"
     # regex = r"^(57)\s?(300|301|302|303|304|324|305|310|311|312|313|314|320|321|322|323|315|316|317|318|319|350|351|302|323|324|324|333)\s?([0-9]){7}$"
     result = re.match(regex, number)
     if result is None:
-        response = response_data( "messageNumber", "error", "Por favor verifique su numero de celular", f"{number}", "null" )
-    else:
+        response = response_data( "messageNumber", "error", "Por favor verifique su numero de celular apiKey", f"{number}", "null" )
+    elif apiKey == 'AlcyonSMS':
         new_number = number.replace('+', '')
         verification_code = create_verification_code()
         url = "https://api.reddantu.com/api/v2/SendSMS"
@@ -28,6 +28,8 @@ def send_verify_number_phone(number):
         response_json =  json.loads(response_sms._content)
         # T = sms_trigger()
         response = response_data( "messageNumber", "success", "El código fue enviado al numero de celular: " f"{new_number}", f"{new_number}", "null" ), response_json
+    else:
+        response = response_data( "messageNumber", "error", "por verifique sus credenciales", "null", "null" )
     return  response
 
 # Creación de códigos de seis dígitos aleatoriamente
