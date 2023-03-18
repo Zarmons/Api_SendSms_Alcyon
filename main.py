@@ -1,50 +1,53 @@
 #FastAPI
 from fastapi import FastAPI, APIRouter
-# from flask import Flask, request, Response
+from router.router import sms
+
+app = FastAPI()
+app.include_router(sms)
+
 
 routes_product = APIRouter()
 fake_db = []
 
 
-#Archivos src
-from src.sms_code.controller import send_verify_number_phone, validate_verification_code
-from src.sms_code.schema import mobile_numbers, verification_code
-from src.get_sms.controller import get_sms_sent
-from src.get_sms.schema import  date_sms
+# #Archivos src
+# from controller import send_verify_number_phone, validate_verification_code
+# from src.sms_code.schema import mobile_numbers, verification_code
+# from src.get_sms.controller import get_sms_sent
+# from src.get_sms.schema import  date_sms
 
-app = FastAPI()
 
-#API para solicitar el numero de celular y enviar SMS
+# #API para solicitar el numero de celular y enviar SMS
 
-@app.post("/sms", name="SMS")
-def send_message(mobile_numbers: mobile_numbers):
-    number = mobile_numbers.mobileNumbers
-    apiKey = mobile_numbers.apiKey
-    clientId = mobile_numbers.clientId
-    response = send_verify_number_phone(number, apiKey, clientId)
-    return response
+# @app.post("/sms", name="SMS")
+# def send_message(mobile_numbers: mobile_numbers):
+#     number = mobile_numbers.mobileNumbers
+#     apiKey = mobile_numbers.apiKey
+#     clientId = mobile_numbers.clientId
+#     response = send_verify_number_phone(number, apiKey, clientId)
+#     return response
 
 #API para verificar código generado
 
-@app.post("/verification_code", name="VERIFICATION_CODE")
-def validate_code(verification_code: verification_code):
-    response = validate_verification_code(verification_code)
-    return response
+# @app.post("/verification_code", name="VERIFICATION_CODE")
+# def validate_code(verification_code: verification_code):
+#     response = validate_verification_code(verification_code)
+#     return response
 
-# Traer información de los sms enviados
+# # Traer información de los sms enviados
 
-@app.get("/list_message_date", name="LIST_MESSAGE_DATE")
-def list_message(fromdate: str, enddate: str):
-    response = get_sms_sent(fromdate, enddate)
-    res = response["Data"]
-    for i in range (len(res)):
-        data = res[i]
-        # OPERATION DB
-        fake_db.append(data)
+# @app.get("/list_message_date", name="LIST_MESSAGE_DATE")
+# def list_message(fromdate: str, enddate: str):
+#     response = get_sms_sent(fromdate, enddate)
+#     res = response["Data"]
+#     for i in range (len(res)):
+#         data = res[i]
+#         # OPERATION DB
+#         fake_db.append(data)
 
-        # OPERATION CACHE
-        save_hash(key=data["MessageId"], data=data)
-    return "success", data, res[i]
+#         # OPERATION CACHE
+#         save_hash(key=data["MessageId"], data=data)
+    # return "success", data, res[i]
 
 
 # Webhook para recibir sms enviados 1 por 1
