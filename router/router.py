@@ -14,16 +14,16 @@ def root():
 
 #API para solicitar el numero de celular y enviar SMS
 
-@sms.post("/send")
+@sms.post("/send/sms")
 def send_message(data_message: MessageSchema):
     messageSend = send_verify_number_phone(data_message.mobileNumber, data_message.apiKey, data_message.clientId)
     with engine.connect() as conn:
         conn.execute(messages.insert().values(messageSend[0]))
-        print(conn)
     return messageSend[1]
 
-@sms.get("/traer")
-def get_sms():
+@sms.get("/get/sms")
+def get_messages():
     with engine.connect() as conn:
         result = conn.execute(messages.select()).fetchall()
+        print(result)
         return result

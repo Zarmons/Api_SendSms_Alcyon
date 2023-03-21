@@ -26,7 +26,7 @@ def send_verify_number_phone(mobileNumber, apiKey, clientId):
 
         response = response_data( "responseMessage", "Success", f"{data['message']}", f"{new_mobileNumber}", f"{verificationCode}", "null", "El código fue enviado al numero de celular: " f"{new_mobileNumber}" )
     else:
-        response = response_data( "responseMessage", "Error", "null", "null", "null", "por verifique sus credenciales")
+        response = response_data( "responseMessage", "Error", "null", "null", "null", "null", "por verifique sus credenciales")
     return  response
 
 # Creación de códigos de seis dígitos aleatoriamente
