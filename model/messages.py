@@ -4,6 +4,7 @@ from config.db import engine, meta_data
 
 messages = Table("messages", meta_data,
                 Column("id", Integer, primary_key=True),
+                Column("messageId", String(255), nullable= False),
                 Column("message", String(255), nullable=False),
                 Column("mobileNumber", String(20), nullable=False),
                 Column("code", Integer, nullable=False),
