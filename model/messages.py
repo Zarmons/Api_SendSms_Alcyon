@@ -8,8 +8,6 @@ messages = Table("messages", meta_data,
                 Column("message", String(255), nullable=False),
                 Column("mobileNumber", String(20), nullable=False),
                 Column("code", Integer, nullable=False),
-                # Column("apiKey", String(255), nullable=False),
-                # Column("clientId", String(255), nullable=False),
                 Column("status", String(10), nullable=False))
 
 meta_data.create_all(engine)

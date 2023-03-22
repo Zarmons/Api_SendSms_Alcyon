@@ -4,7 +4,8 @@ from schema.verification_code_schema import VerificationCodeSchema
 from config.db import engine
 from model.messages import messages
 from model.customers import customers
-from controller.controller_message import verify_number_send_message, validate_verification_code
+from controller.controller_message_sent import verify_number_send_message
+from controller.controller_verification_code import validate_verification_code
 
 sms = APIRouter()
 
@@ -19,19 +20,19 @@ def send_message(dataMessage: MessageSchema):
     with engine.connect() as conn:
         client = conn.execute(customers.select().filter(customers.c.clientId == dataMessage.clientId).filter(customers.c.apiKey == dataMessage.apiKey)).first()
         if client:
-            messageSend = verify_number_send_message(dataMessage.mobileNumber)
-            if messageSend[0]["status"] == "Success":
-                conn.execute(messages.insert().values(messageSend[0]))
-                respuestaApi = messageSend[1]
+            messageSent = verify_number_send_message(dataMessage.mobileNumber)
+            if messageSent[0]["status"] == "Success":
+                conn.execute(messages.insert().values(messageSent[0]))
+                responseApi = messageSent[1]
             else:
-                respuestaApi = messageSend[1]
+                responseApi = messageSent[1]
         else:
-            respuestaApi= "Por favor verifique sus credenciales"
-    return respuestaApi
+            responseApi= "Por favor verifique sus credenciales"
+    return responseApi
 
 #API para traer los mensajes enviados
 
-@sms.get("/get/sms", response_model=list[MessageSchema])
+@sms.get("/get/sms")
 def get_messages():
     with engine.connect() as conn:
         result = conn.execute(messages.select()).fetchall()
