@@ -1,6 +1,6 @@
 import requests, re, random, string
 
-from controller.controller_apis_response import build_response
+from controller.controller_apis_response import build_response_message_sent
 
 global global_code
 
@@ -11,11 +11,11 @@ def verify_number_send_message(mobileNumber):
     result = re.match(regex, mobileNumber)
     if result is None:
         dataResponse = {
-            "replyTo": 2,
+            "replyTo": "messageError",
             "status": "Error",
             "response": "Por favor verifique el número de teléfono" 
         }
-        response = build_response( dataResponse )
+        response = build_response_message_sent( dataResponse )
     else:
         newMobileNumber = mobileNumber.replace('+', '')
         verificationCode = create_verification_code()
@@ -30,7 +30,7 @@ def verify_number_send_message(mobileNumber):
         }        
         requests.post(url, json=data)
         dataResponse = {
-            "replyTo": 1,
+            "replyTo": "messageSuccess",
             "message": f"{data['message']}", 
             "mobileNumber": f"{newMobileNumber}",
             "code": f"{verificationCode}",
@@ -38,7 +38,7 @@ def verify_number_send_message(mobileNumber):
             "messageId": f"{messageId}",
             "response": "El código fue enviado al número de celular: " f"{newMobileNumber}" 
         }
-        response = build_response( dataResponse )
+        response = build_response_message_sent( dataResponse )
     return  response
 
 # Creación de códigos de seis dígitos aleatoriamente
