@@ -36,7 +36,7 @@ def send_message(dataMessage: MessageSchema):
 def get_messages():
     with engine.connect() as conn:
         result = conn.execute(messages.select()).fetchall()
-        return result
+    return result
 
 # API para verificar código generado
 
@@ -47,5 +47,5 @@ def validate_code(dataVerification: VerificationCodeSchema):
         if code:
             response = validate_verification_code()
         else:
-             response = {"response":"código invalido"}
+            response = {"response":"código invalido"}
     return response

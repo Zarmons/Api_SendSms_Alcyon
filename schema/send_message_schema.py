@@ -18,4 +18,3 @@ class ResponseGetMessagesSchema(BaseModel):
     # apiKey: str
     # clientId: str
     status: str
-
