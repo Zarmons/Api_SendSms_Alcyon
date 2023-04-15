@@ -2,8 +2,6 @@ import requests, re, random, string
 
 from controller.controller_apis_response import build_response_message_sent
 
-global global_code
-
 # Validación del numero celular y envió de SMS con en el código de validación
 
 def verify_number_send_message(mobileNumber):
