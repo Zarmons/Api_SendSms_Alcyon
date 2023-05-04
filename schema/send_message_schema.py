@@ -15,6 +15,6 @@ class ResponseGetMessagesSchema(BaseModel):
     message: str
     mobileNumber: str
     code: int
-    # apiKey: str
-    # clientId: str
+    apiKey: str
+    clientId: str
     status: str

@@ -3,7 +3,7 @@ from schema.send_message_schema import MessageSchema, ResponseMessageSchema, Res
 from schema.verification_code_schema import VerificationCodeSchema, ResponseVerificationCodeSchema
 from config.db import engine
 from model.messages import messages
-from model.customers import customers
+from model.users import users
 from controller.controller_message_sent import verify_number_send_message
 from controller.controller_verification_code import validate_verification_code
 
@@ -18,8 +18,8 @@ def root():
 @sms.post("/post/send", response_model=ResponseMessageSchema)
 def send_message(dataMessage: MessageSchema):
     with engine.connect() as conn:
-        client = conn.execute(customers.select().filter(customers.c.clientId == dataMessage.clientId).filter(customers.c.apiKey == dataMessage.apiKey)).first()
-        if client:
+        credentials = conn.execute(users.select().filter(users.c.user_clientId == dataMessage.clientId).filter(users.c.user_apiKey == dataMessage.apiKey).filter(users.c.user_status == "ACTIVE")).first()
+        if credentials:
             messageSent = verify_number_send_message(dataMessage.mobileNumber)
             if messageSent[0]["status"] == "Success":
                 conn.execute(messages.insert().values(messageSent[0]))
